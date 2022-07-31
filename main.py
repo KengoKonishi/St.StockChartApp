@@ -74,7 +74,7 @@ st.sidebar.write("""
 st.sidebar.write("""
 ## 表示日数選択
 """)
-days = st.sidebar.slider('日数', 1, 365, 20 )
+days = st.sidebar.slider('日数', 1, 365, 180)
 
 # 米国株
 st.sidebar.write("""
