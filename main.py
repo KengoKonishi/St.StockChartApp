@@ -36,7 +36,7 @@ def displayData(days, tickers, ymin, ymax, type, unit):
     key_names = list(tickers.keys())
     # multiseletで社名選択
     companies = st.multiselect(
-        '会社名を選択して下さい。',
+        '銘柄を選択して下さい。',
         list(df.index),
         [key_names[0], key_names[1], key_names[2], key_names[3]]
     )
@@ -47,7 +47,7 @@ def displayData(days, tickers, ymin, ymax, type, unit):
         st.write(f"### 株価{unit}", data.sort_index())
         data = data.T.reset_index()
         data = pd.melt(data, id_vars = ['Date']).rename(
-            columns = {'value': 'Stock Prices(USD)'}
+            columns = {'value': f"Stock Prices({unit})"}
         )
 
         chart = (
@@ -63,8 +63,6 @@ def displayData(days, tickers, ymin, ymax, type, unit):
 
     return
 
-
-
 # try:
 # サイドバー
 st.sidebar.write("""
@@ -72,21 +70,18 @@ st.sidebar.write("""
 こちらは株価可視化ツールです。以下のオプションから表示日数および株価の範囲を指定できます。
 """)
 
+# 日数範囲選択は共通処理
 st.sidebar.write("""
 ## 表示日数選択
 """)
-
 days = st.sidebar.slider('日数', 1, 50, 20 )
 
+# 米国株
 st.sidebar.write("""
 ## 株価の範囲指定(単位：USD)
 """)
 
 us_ymin, us_ymax = st.sidebar.slider('範囲を指定してください。', 0.0 , 500.0, (0.0, 500.0))
-
-
-
-
 us_tickers = {
     'google': 'GOOGL',
     'amazon': 'AMZN',
@@ -95,17 +90,15 @@ us_tickers = {
     'microsoft': 'MSFT',
     'netflix': 'NFLX',
     'tesla': 'TSLA',
-    # 'shigabank': '8366.T',
 }
 type = '米国主要株価'
 displayData(days, us_tickers, us_ymin, us_ymax, type, "USD")
 
+# 日本株
 st.sidebar.write("""
 ## 株価の範囲指定(単位：JPY)
 """)
-
 jp_ymin, jp_ymax = st.sidebar.slider('範囲を指定してください。', 0.0 , 8500.0, (0.0, 8500.0))
-
 jp_tickers = {
     'ソフトバンクグループ㈱': '9984.T',
     '楽天グループ㈱': '4755.T',
@@ -115,33 +108,19 @@ jp_tickers = {
 }
 type = '日経主要株価'
 displayData(days, jp_tickers, jp_ymin, jp_ymax, type, "JPY")
-# us_df = getData(days, us_tickers)
 
-# companies = st.multiselect(
-#     '会社名を選択して下さい。',
-#     list(us_df.index),
-#     ['google', 'amazon', 'facebook', 'apple']
-# )
-# if not companies:
-#     st.error('少なくとも1社は選んでください')
-# else:
-#     data = us_df.loc[companies]
-#     st.write("### 株価(USD)", data.sort_index())
-#     data = data.T.reset_index()
-#     data = pd.melt(data, id_vars = ['Date']).rename(
-#         columns = {'value': 'Stock Prices(USD)'}
-#     )
+# 投資信託
+# 投資信託の場合はyahooファイナンス記載の証券コードを上手く読めこめない。原因のちのち検証する必要あり
+# toushin_tickers = {
+#     'SBI・V・S&P500インデックス・ファンド': '89311199',
+#     'eMAXIS Slim全世界株式(除く日本)': '03316183',
+#     'ニッセイ 外国債券インデックスファンド': '2931213C',
+#     'eMAXIS Slim全世界株式(オール･カントリー)': '0331418A',
+#     'ひふみプラス': '9C311125',
+# }
+# type = '投資信託'
+# displayData(days, toushin_tickers, jp_ymin, jp_ymax, type, "JPY")
 
-#     chart = (
-#         alt.Chart(data)
-#         .mark_line(opacity = 0.8, clip = True)
-#         .encode(
-#             x = "Date:T",
-#             y = alt.Y("Stock Prices(USD):Q", stack= None, scale = alt.Scale(domain=[us_ymin, us_ymax])),
-#             color = 'Name:N'
-#         )
-#     )
-#     st.altair_chart(chart, use_container_width = True)
 # except:
 #     st.error(
 #         "エラーが発生致しました！"
