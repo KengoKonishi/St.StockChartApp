@@ -85,7 +85,7 @@ us_ymin, us_ymax = st.sidebar.slider('範囲を指定してください。', 0.0
 us_tickers = {
     'google': 'GOOGL',
     'amazon': 'AMZN',
-    'facebook': 'FB', 
+    'facebook': 'META', 
     'apple': 'AAPL',
     'microsoft': 'MSFT',
     'netflix': 'NFLX',
