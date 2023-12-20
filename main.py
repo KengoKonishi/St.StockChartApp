@@ -10,13 +10,12 @@ st.title('株価可視化アプリ')
 
 # 株価取得メソッド
 # キャッシュの貯めこみにより高速な読み取りが可能
-@st.cache
+@st.cache_data
 def getData(days, tickers):
     df = pd.DataFrame()
     for company in tickers.keys():
         tkr = yf.Ticker(tickers[company])
         hist = tkr.history(period=f'{days}d')
-        hist.index = hist.index.strftime('%d %B %Y')
         hist = hist[['Close']]
         hist.columns = [company]
         hist = hist.T
@@ -85,7 +84,7 @@ us_ymin, us_ymax = st.sidebar.slider('範囲を指定してください。', 0.0
 us_tickers = {
     'google': 'GOOGL',
     'amazon': 'AMZN',
-    'facebook': 'META', 
+    'facebook': 'META',
     'apple': 'AAPL',
     'microsoft': 'MSFT',
     'netflix': 'NFLX',
