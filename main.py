@@ -10,7 +10,7 @@ st.title('株価可視化アプリ')
 
 # 株価取得メソッド
 # キャッシュの貯めこみにより高速な読み取りが可能
-@st.cache_data
+@st.cache
 def getData(days, tickers):
     df = pd.DataFrame()
     for company in tickers.keys():
